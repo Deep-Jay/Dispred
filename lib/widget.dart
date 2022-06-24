@@ -13,8 +13,8 @@ You should have received a copy of the GNU General Public License along with Dis
 If not, see <https://www.gnu.org/licenses/>. */
 
 import 'package:flutter/material.dart';
+import 'package:potdispred1/splash_screen.dart';
 import 'about_page.dart';
-import 'how_to_use.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
@@ -44,6 +44,13 @@ class NavigationDrawerWidget extends StatelessWidget {
                     text: 'Home',
                     icon: Icons.home,
                     onClicked: () => selectedItem(context, 0)),
+                const SizedBox(
+                  height: 10,
+                ),
+                buildMenuItem(
+                    text: 'Reload',
+                    icon: Icons.refresh,
+                    onClicked: () => selectedItem(context, 4)),
                 const SizedBox(
                   height: 10,
                 ),
@@ -149,7 +156,7 @@ Future<void> selectedItem(BuildContext context, int index) async {
       break;
     case 4:
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HowtoUsePage()));
+          .push(MaterialPageRoute(builder: (context) => const Splash()));
       break;
     case 2:
       _launch(source_code);

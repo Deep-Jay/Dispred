@@ -244,16 +244,16 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                     controller: scrollController,
                     children: [
                       Container(
-                        height: 35,
+                        height: 20,
                         decoration: BoxDecoration(
-                            border: Border.all(width: 10),
+                            // border: Border.all(width: 10),
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10)),
                             color: Colors.black),
                         child: const Center(
                             child: Icon(
-                          Icons.menu,
+                          Icons.drag_handle_rounded,
                           color: Colors.white,
                         )),
                       ),
