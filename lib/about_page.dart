@@ -12,9 +12,7 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with Dispred.
 If not, see <https://www.gnu.org/licenses/>. */
 
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatelessWidget {
@@ -106,7 +104,7 @@ class AboutPage extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => {_launchURLjay()},
+                    onTap: () => {_launch(jay_git)},
                     child: const Text(
                       "Jaydeep Nath",
                       style: TextStyle(
@@ -129,7 +127,7 @@ class AboutPage extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => {_launchURLsay()},
+                    onTap: () => {_launch(say_git)},
                     child: const Text(
                       "Sayan Khanra",
                       style: TextStyle(
@@ -141,11 +139,11 @@ class AboutPage extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () => {_launchURLlis()},
+                onTap: () => {_launch(liscense)},
                 child: const Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
-                    "Liscensed Under: GNU-GLPv3",
+                    "Licensed Under: GNU-GPLv3",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
@@ -167,29 +165,38 @@ class AboutPage extends StatelessWidget {
   }
 }
 
-_launchURLjay() async {
-  const url = 'https://www.github.com/Deep-Jay';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw PlatformException(code: 'Could not launch $url');
-  }
-}
+// _launchURLjay() async {
+//   const url = 'https://www.github.com/Deep-Jay';
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw PlatformException(code: 'Could not launch $url');
+//   }
+// }
 
-_launchURLsay() async {
-  const url = 'https://www.github.com/sskbond007';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw PlatformException(code: 'Could not launch $url');
-  }
-}
+// _launchURLsay() async {
+//   const url = 'https://www.github.com/sskbond007';
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw PlatformException(code: 'Could not launch $url');
+//   }
+// }
 
-_launchURLlis() async {
-  const url = 'https://github.com/Deep-Jay/Dispred_App/blob/main/COPYING.txt';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw PlatformException(code: 'Could not launch $url');
-  }
+Uri jay_git = Uri.parse('https://www.github.com/Deep-Jay');
+Uri say_git = Uri.parse('https://www.github.com/sskbond007');
+Uri liscense =
+    Uri.parse('https://github.com/Deep-Jay/Dispred_App/blob/main/COPYING.txt');
+
+// _launchURLlis() async {
+//   const url = 'https://github.com/Deep-Jay/Dispred_App/blob/main/COPYING.txt';
+//   if (await canLaunch(url)) {
+//     await launch(url);
+//   } else {
+//     throw PlatformException(code: 'Could not launch $url');
+//   }
+// }
+
+Future<void> _launch(Uri url) async {
+  await canLaunchUrl(url) ? await launchUrl(url) : NullThrownError();
 }

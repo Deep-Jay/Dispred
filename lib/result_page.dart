@@ -36,7 +36,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
 -  Host crop and plants are Solanaceous plants such as potato, tomato, petunia and nightshade.
 
--  On leaves the initial symptoms appear as pale green water soaked spots (2-10 mm) mostly on the margin and tips.
+-  Initial symptoms appear on leaves the as pale green water soaked spots (2-10 mm) mostly on the margin and tips.
 
 -  In moist weather, spots may appear anywhere on the leaves, enlarge rapidly and turn necrotic and black killing the entire leaf instantly.
 
@@ -58,7 +58,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
 -  Scout plants often and remove infected plants, infected tubers, volunteers and weeds.
 
--  Clean tools and equipment after leaving a field.
+-  Clean tools and equipments after leaving a field.
 
 -  Keep tubers in storage dry and at low temperatures (38°F)(3-4°C).
 
@@ -270,8 +270,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                               style: const TextStyle(color: Colors.white),
                               children: [
                                 const TextSpan(
-                                    text:
-                                        "About the Disease in a nutshell:\n\n",
+                                    text: "In a nutshell:\n\n",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20)),

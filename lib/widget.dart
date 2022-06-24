@@ -12,7 +12,6 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with Dispred.
 If not, see <https://www.gnu.org/licenses/>. */
 
-
 import 'package:flutter/material.dart';
 import 'about_page.dart';
 import 'how_to_use.dart';
@@ -96,7 +95,7 @@ Widget buildHeader({required String name}) {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              "Potato Leaf Blight\nDisease Recognisition\nApp",
+              "Potato Leaf Blight\nDisease Recognition\nApp",
               style: TextStyle(
                   fontSize: 26,
                   color: Colors.amberAccent,
@@ -129,22 +128,12 @@ Widget buildMenuItem(
       onTap: onClicked);
 }
 
-_launchsURL() async {
-  const url = 'https://www.github.com/Deep-Jay/Dispred_App';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
+Uri source_code = Uri.parse('https://www.github.com/Deep-Jay/Dispred');
+Uri main_project =
+    Uri.parse('https://www.github.com/Deep-Jay/Deep-learning_Poject');
 
-_launchpURL() async {
-  const url = 'https://www.github.com/Deep-Jay/Deep-learning_Poject';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
+Future<void> _launch(Uri url) async {
+  await canLaunchUrl(url) ? await launchUrl(url) : NullThrownError();
 }
 
 Future<void> selectedItem(BuildContext context, int index) async {
@@ -163,10 +152,10 @@ Future<void> selectedItem(BuildContext context, int index) async {
           .push(MaterialPageRoute(builder: (context) => const HowtoUsePage()));
       break;
     case 2:
-      _launchsURL();
+      _launch(source_code);
       break;
     case 3:
-      _launchpURL();
+      _launch(main_project);
       break;
   }
 }

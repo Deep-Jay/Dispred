@@ -12,7 +12,6 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with Dispred.
 If not, see <https://www.gnu.org/licenses/>. */
 
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:potdispred1/camera_page.dart';
@@ -80,7 +79,7 @@ class _SplashState extends State<Splash> {
               ),
               const SizedBox(height: 80),
               const Text(
-                "Liscensed under: GNU-GPLv3",
+                "Licensed under: GNU-GPLv3",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               )
             ],
