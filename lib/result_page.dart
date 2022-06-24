@@ -12,7 +12,6 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with Dispred.
 If not, see <https://www.gnu.org/licenses/>. */
 
-
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +149,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         if (output![0]["label"] == "Healthy")
           {
             color = Colors.green,
-            about = "All Good",
+            about = "All Good\n\n\n",
             favenvcond = " ",
             prevension = " "
           }
