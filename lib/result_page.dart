@@ -108,6 +108,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   late String about;
   late String favenvcond;
   late String prevension;
+  late double maxVal;
 
   @override
   void initState() {
@@ -150,22 +151,25 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           {
             color = Colors.green,
             about = "All Good\n\n\n",
-            favenvcond = " ",
-            prevension = " "
+            favenvcond = "\n",
+            prevension = "\n",
+            maxVal = 0.25
           }
         else if (output![0]["label"] == "Early Blight")
           {
             color = Colors.yellow,
             about = aboutEarly,
             favenvcond = envcondEarly,
-            prevension = manageEarly
+            prevension = manageEarly,
+            maxVal = 0.7
           }
         else
           {
             color = Colors.amber,
             about = aboutLate,
             favenvcond = envcondLate,
-            prevension = manageLate
+            prevension = manageLate,
+            maxVal = 0.7
           }
       };
 
@@ -235,7 +239,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 child: DraggableScrollableSheet(
                   initialChildSize: .2,
                   minChildSize: .2,
-                  maxChildSize: .7,
+                  maxChildSize: maxVal,
                   builder: (context, scrollController) => ListView(
                     controller: scrollController,
                     children: [
