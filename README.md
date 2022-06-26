@@ -1,4 +1,4 @@
-# potdispred1
+# Dispred App
 
 A new Flutter project.
 
