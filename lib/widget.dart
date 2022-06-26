@@ -47,13 +47,13 @@ class NavigationDrawerWidget extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                buildMenuItem(
-                    text: 'Reload',
-                    icon: Icons.refresh,
-                    onClicked: () => selectedItem(context, 4)),
-                const SizedBox(
-                  height: 10,
-                ),
+                // buildMenuItem(
+                //     text: 'Reload',
+                //     icon: Icons.refresh,
+                //     onClicked: () => selectedItem(context, 4)),
+                // const SizedBox(
+                //   height: 10,
+                // ),
                 buildMenuItem(
                     text: 'About',
                     icon: Icons.info,

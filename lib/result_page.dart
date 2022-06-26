@@ -16,6 +16,8 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:tflite/tflite.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
@@ -173,6 +175,20 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           }
       };
 
+  // _saveImage() async {
+  //   final Directory? savePath = await getExternalStorageDirectory();
+  //   final String path = savePath.toString().split('Android')[0].split("'")[1] +
+  //       "Download/image.png";
+  //   if (await Permission.storage.request().isGranted) {
+  //     widget.imageFile.saveTo(path);
+  //     print("saved!");
+  //   } else if (await Permission.storage.request().isPermanentlyDenied) {
+  //     await openAppSettings();
+  //   } else if (await Permission.storage.request().isDenied) {
+  //     print(path);
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -191,6 +207,9 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             ),
             centerTitle: true,
             automaticallyImplyLeading: false,
+            // actions: [
+            //   IconButton(onPressed: _saveImage, icon: Icon(Icons.save))
+            // ],
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
