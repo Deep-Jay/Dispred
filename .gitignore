@@ -46,3 +46,4 @@ app.*.map.json
 /android/app/release
 
 .token
+lib/how_to_use.dart
