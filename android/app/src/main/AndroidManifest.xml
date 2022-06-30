@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.aiapp.Dispred">
+    package="com.example.potdispred1">
     <queries>
       <!-- If your app opens https URLs -->
       <intent>
