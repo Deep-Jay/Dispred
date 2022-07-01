@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along with Dis
 If not, see <https://www.gnu.org/licenses/>. */
 
 import 'package:flutter/material.dart';
-import 'package:potdispred1/splash_screen.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'about_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,13 +47,13 @@ class NavigationDrawerWidget extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                // buildMenuItem(
-                //     text: 'Reload',
-                //     icon: Icons.refresh,
-                //     onClicked: () => selectedItem(context, 4)),
-                // const SizedBox(
-                //   height: 10,
-                // ),
+                buildMenuItem(
+                    text: 'Reload',
+                    icon: Icons.refresh,
+                    onClicked: () => selectedItem(context, 4)),
+                const SizedBox(
+                  height: 10,
+                ),
                 buildMenuItem(
                     text: 'About',
                     icon: Icons.info,
@@ -155,8 +155,7 @@ Future<void> selectedItem(BuildContext context, int index) async {
           .push(MaterialPageRoute(builder: (context) => const AboutPage()));
       break;
     case 4:
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Splash()));
+      Phoenix.rebirth(context);
       break;
     case 2:
       _launch(source_code);

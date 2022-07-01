@@ -16,14 +16,18 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:tflite/tflite.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
   final XFile imageFile;
+  final dynamic stopWatch;
 
-  const DisplayPictureScreen({Key? key, required this.imageFile})
+  const DisplayPictureScreen(
+      {Key? key, required this.imageFile, required this.stopWatch})
       : super(key: key);
 
   @override
@@ -111,16 +115,17 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   late String favenvcond;
   late String prevension;
   late double maxVal;
+  late bool isSaved;
 
   @override
   void initState() {
     super.initState();
     loadModel();
     runModel();
+    isSaved = false;
   }
 
   loadModel() async {
-    // Tflite.close();
     try {
       await Tflite.loadModel(
           model: "assets/model_unquant.tflite", labels: "assets/labels.txt");
@@ -130,6 +135,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   }
 
   runModel() async {
+    
     loadModel();
     try {
       var predictions = await Tflite.runModelOnImage(
@@ -142,14 +148,35 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       setState(() {
         output = predictions;
       });
+      final timeElapsed = widget.stopWatch.elapsedMilliseconds / 1000;
+      widget.stopWatch..stop();
       await _changeColor();
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.done,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              "Execution Completed in ${timeElapsed}s",
+            )
+          ],
+        ),
+        action: SnackBarAction(label: "DISMISS", onPressed: () {}),
+        duration: Duration(milliseconds: 2500),
+      ));
     } on PlatformException {
       // print("There was an error in prediction");
     }
   }
 
   _changeColor() => {
-        if (output![0]["label"] == "Healthy")
+        if (output?[0]["label"] == "Healthy")
           {
             color = Colors.green,
             about = "All Good\n\n\n",
@@ -157,7 +184,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             prevension = "\n",
             maxVal = 0.25
           }
-        else if (output![0]["label"] == "Early Blight")
+        else if (output?[0]["label"] == "Early Blight")
           {
             color = Colors.yellow,
             about = aboutEarly,
@@ -175,19 +202,94 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           }
       };
 
-  // _saveImage() async {
-  //   final Directory? savePath = await getExternalStorageDirectory();
-  //   final String path = savePath.toString().split('Android')[0].split("'")[1] +
-  //       "Download/image.png";
-  //   if (await Permission.storage.request().isGranted) {
-  //     widget.imageFile.saveTo(path);
-  //     print("saved!");
-  //   } else if (await Permission.storage.request().isPermanentlyDenied) {
-  //     await openAppSettings();
-  //   } else if (await Permission.storage.request().isDenied) {
-  //     print(path);
-  //   }
-  // }
+  _saveImage() async {
+    final Directory? savePath = await getExternalStorageDirectory();
+    DateTime now = DateTime.now();
+    var epochTime = now.millisecondsSinceEpoch;
+    String path =
+        savePath.toString().split('Android')[0].split("'")[1] + "Download/";
+    new Directory(path + "Dispred/").create().then((Directory directory) =>
+        path = directory.path + "${output![0]["label"]}_${epochTime}.jpg");
+    if (!isSaved) {
+      if (await Permission.storage.request().isGranted) {
+        await widget.imageFile.saveTo(path);
+        final pathShow = path.split("0")[1].split("/")[1] +
+            "/" +
+            path.split("0")[1].split("/")[2] +
+            "/";
+        isSaved = true;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Row(
+            children: [
+              Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(
+                  "Svaed at /$pathShow\nas ${output![0]["label"]}_${epochTime}.jpg")
+            ],
+          ),
+          duration: Duration(seconds: 10),
+          action: SnackBarAction(
+            label: "OK",
+            onPressed: () {},
+          ),
+        ));
+      } else if (await Permission.storage.request().isPermanentlyDenied) {
+        // await openAppSettings();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(days: 30),
+          content: Row(
+            children: [
+              Icon(
+                Icons.report_problem,
+                color: Colors.white,
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text("A requested permission was denied")
+            ],
+          ),
+          action: SnackBarAction(
+            label: "OPEN\nSETTINGS",
+            onPressed: () => openAppSettings(),
+          ),
+        ));
+      } else if (await Permission.storage.request().isDenied) {
+        print(path);
+      }
+    } else {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Row(
+          children: [
+            Icon(
+              Icons.info,
+              color: Colors.white,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Text("Already Saved")
+          ],
+        ),
+        action: SnackBarAction(
+          label: "OK",
+          onPressed: () {},
+        ),
+      ));
+    }
+  }
+
+  @override
+  void dispose() {
+    Tflite.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,9 +309,9 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             ),
             centerTitle: true,
             automaticallyImplyLeading: false,
-            // actions: [
-            //   IconButton(onPressed: _saveImage, icon: Icon(Icons.save))
-            // ],
+            actions: [
+              IconButton(onPressed: _saveImage, icon: Icon(Icons.save))
+            ],
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +330,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                       children: [
                         Center(
                           child: Text(
-                            'Disease Predicted: ${output![0]["label"]}',
+                            'Disease Predicted: ${output?[0]["label"]}',
                             //\n\nConfidence: ${(double.parse((output![0]["confidence"]).toStringAsFixed(2)) * 100).toString()}%',
                             style: const TextStyle(
                                 color: Colors.black,
@@ -325,87 +427,12 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           floatingActionButton: FloatingActionButton(
               backgroundColor: Colors.green,
               onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 Navigator.of(context).pop(true);
               },
               child: const Icon(Icons.arrow_back)),
         )
       ],
     );
-
-    // Scaffold(
-    //   appBar: AppBar(
-    //       backgroundColor: Colors.green,
-    //       title: const Text('Results',),
-    //       centerTitle: true,
-    //       ),
-    //   extendBody: true,
-    //   body: Container(
-    //     height: double.infinity,
-    //     width: double.infinity,
-    //     // color: Colors.green[800],
-    //     decoration: const BoxDecoration(
-    //         image: DecorationImage(
-    //             image: AssetImage("assets/mobile_blur.jpg"),
-    //             fit: BoxFit.cover)),
-    //     child: Padding(
-    //       padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
-    //       child: SingleChildScrollView(
-    //         scrollDirection: Axis.vertical,
-    //         child: Column(
-    //             // mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //             children: [
-    //               Image.file(File(widget.imageFile.path)),
-    //               Padding(
-    //                   padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-    //                   child: output != null
-    //                       ? Padding(
-    //                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-    //                           child: Text(
-    //                             'Label: ${output![0]["label"]}\n\nConfidence: ${(double.parse((output![0]["confidence"]).toStringAsFixed(2)) * 100).toString()}%',
-    //                             // '$output',
-    //                             style: const TextStyle(
-    //                                 color: Colors.white, fontSize: 20),
-    //                           ),
-    //                         )
-    //                       : Container()),
-    //               LinearProgressIndicator(
-    //                 backgroundColor: Colors.greenAccent,
-    //                 value: output![0]["confidence"],
-    //                 color: color,
-    //               ),
-    //               const SizedBox(
-    //                 height: 80,
-    //               )
-    //             ]),
-    //       ),
-    //     ),
-    //   ),
-    //   floatingActionButton: FloatingActionButton(
-    //     backgroundColor: Colors.green,
-    //     onPressed: () {
-    //       Navigator.of(context).pop(true);
-    //     },
-    //     child: const Icon(Icons.arrow_back)
-    //   ),
-    //   // bottomNavigationBar: BottomAppBar(
-    //   //     color: Colors.green,
-    //   //     shape: const CircularNotchedRectangle(),
-    //   //     notchMargin: 4,
-    //   //     child: Row(
-    //   //       children: [
-    //   //         const Spacer(),
-    //   //         IconButton(
-    //   //           icon: const Icon(Icons.west),
-    //   //           color: Colors.white,
-    //   //           onPressed: () {
-    //   //             Navigator.of(context).pop(true);
-    //   //           },
-    //   //         ),
-    //   //         const SizedBox(
-    //   //           width: 10,
-    //   //         )
-    //   //       ],
-    //   //     )),
-    // );
   }
 }

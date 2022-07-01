@@ -14,33 +14,20 @@ If not, see <https://www.gnu.org/licenses/>. */
 
 
 import 'dart:async';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:potdispred1/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // final cameras = await availableCameras();
-  // final firstCamera = cameras.first;
 
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(),
-      home: const Splash()
+    Phoenix(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(),
+        home: const Splash()
+      ),
     ),
   );
+  
 }
-
-// Future _getStoragePermission() async {
-//   if (await Permission.storage.request().isGranted) {
-//     setState(() {
-//       permissionGranted = true;
-//     });
-//   } else if (await Permission.storage.request().isPermanentlyDenied) {
-//     await openAppSettings();
-//   } else if (await Permission.storage.request().isDenied) {
-//     setState(() {
-//       permissionGranted = false;
-//     });
-//   }
-// }

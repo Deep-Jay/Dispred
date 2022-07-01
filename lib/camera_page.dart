@@ -12,7 +12,6 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with Dispred.
 If not, see <https://www.gnu.org/licenses/>. */
 
-
 import 'dart:async';
 import 'package:potdispred1/widget.dart';
 import 'result_page.dart';
@@ -42,6 +41,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
     _controller = CameraController(
       widget.camera,
       ResolutionPreset.medium,
@@ -68,7 +68,42 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         backgroundColor: Colors.green,
         title: const Text('Select Image'),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.photo_size_select_actual_rounded),
+            color: Colors.white,
+            onPressed: () async {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Row(
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text("Execution Started")
+                  ],
+                ),
+              ));
+              XFile? image = await picker.pickImage(
+                  source: ImageSource.gallery, maxHeight: 1800);
+              if (image != null) {
+                final stopwatch = Stopwatch()..start();
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => DisplayPictureScreen(
+                          imageFile: image,
+                          stopWatch: stopwatch,
+                        )));
+              }
+            },
+          ),
+        ],
       ),
       extendBody: true,
       body: Container(
@@ -97,6 +132,26 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         onPressed: () async {
+          final stopwatch = Stopwatch()..start();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.green,
+                    color: Colors.amberAccent,
+                    strokeWidth: 3,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text("Execution Started")
+              ],
+            ),
+          ));
           try {
             await _initializeControllerFuture;
             await _controller.setFlashMode(FlashMode.off);
@@ -106,6 +161,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
               MaterialPageRoute(
                 builder: (context) => DisplayPictureScreen(
                   imageFile: image,
+                  stopWatch: stopwatch,
                 ),
               ),
             );
@@ -119,42 +175,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           size: 45,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-          color: Colors.white54,
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 6,
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  // const NavigationDrawerWidget();
-                  _key.currentState!.openDrawer();
-                },
-                icon: const Icon(Icons.menu),
-                color: Colors.white,
-                iconSize: 35,
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.photo_size_select_actual_rounded),
-                color: Colors.white,
-                iconSize: 35,
-                onPressed: () async {
-                  XFile? image = await picker.pickImage(
-                      source: ImageSource.gallery, maxHeight: 1800);
-                  if (image != null) {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            DisplayPictureScreen(imageFile: image)));
-                  }
-                },
-              ),
-              const SizedBox(
-                width: 10,
-              )
-            ],
-          )),
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 }
