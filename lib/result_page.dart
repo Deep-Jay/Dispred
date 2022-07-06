@@ -229,7 +229,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 width: 20,
               ),
               Text(
-                  "Svaed at /$pathShow\nas ${output![0]["label"]}_${epochTime}.jpg")
+                  "Saved at /$pathShow\nas ${output![0]["label"]}_${epochTime}.jpg")
             ],
           ),
           duration: Duration(seconds: 10),
