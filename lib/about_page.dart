@@ -186,7 +186,7 @@ class AboutPage extends StatelessWidget {
 Uri jay_git = Uri.parse('https://www.github.com/Deep-Jay');
 Uri say_git = Uri.parse('https://www.github.com/sskbond007');
 Uri liscense =
-    Uri.parse('https://github.com/Deep-Jay/Dispred_App/blob/main/COPYING.txt');
+    Uri.parse('https://github.com/Deep-Jay/Dispred/blob/main/COPYING.txt');
 
 // _launchURLlis() async {
 //   const url = 'https://github.com/Deep-Jay/Dispred_App/blob/main/COPYING.txt';

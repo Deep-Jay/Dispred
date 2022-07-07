@@ -137,7 +137,7 @@ Widget buildMenuItem(
 
 Uri source_code = Uri.parse('https://www.github.com/Deep-Jay/Dispred');
 Uri main_project =
-    Uri.parse('https://www.github.com/Deep-Jay/Deep-learning_Poject');
+    Uri.parse('https://www.github.com/Deep-Jay/Deep-learning_Project');
 
 Future<void> _launch(Uri url) async {
   await canLaunchUrl(url) ? await launchUrl(url) : NullThrownError();
