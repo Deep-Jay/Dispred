@@ -105,7 +105,7 @@ Widget buildHeader({required String name}) {
               "Potato Leaf Blight\nDisease Recognition\nApp",
               style: TextStyle(
                   fontSize: 26,
-                  color: Colors.amberAccent,
+                  color: Colors.red,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Roboto-Medium'),
             ),
